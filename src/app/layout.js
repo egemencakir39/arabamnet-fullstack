@@ -1,6 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import { Saira } from "next/font/google";
+
+const saira = Saira({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"], 
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +21,7 @@ const geistMono = Geist_Mono({
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-gray-100">
+      <body className={saira.className}>
         <main>{children}
           <Toaster position="top-right" reverseOrder={false} />
         </main>
