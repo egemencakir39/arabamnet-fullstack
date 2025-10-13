@@ -32,9 +32,9 @@ const Stats = () => {
     },
   ];
   return (
-    <div className="container md:flex justify-center mt-15">
+    <div className="container grid sm:grid-cols-2 grid-cols-1 lg:grid-cols-4 justify-items-center  mt-15">
       {stats.map((item, i) => (
-        <div key={i} className="w-75 m-5 ">
+        <div key={i} className="w-70 m-5 ">
           <div className="flex">
             <div className="bg-[#273c4d] p-3 rounded-4xl">{item.icon}</div>
             <h4 className="text-2xl py-2 px-4">{item.number}</h4>
