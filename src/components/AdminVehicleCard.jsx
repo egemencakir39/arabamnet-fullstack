@@ -1,15 +1,17 @@
-"use client";
-import AdminVehicles from "@/components/AdminVehicles";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { FaRoad } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
+import { GiStoneWheel } from "react-icons/gi";
+import { FaLocationDot } from "react-icons/fa6";
+import { BsFillFuelPumpFill } from "react-icons/bs";
+import Link from "next/link";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { IoMdAdd } from "react-icons/io";
 import { TextField } from "@mui/material";
 
-const page = () => {
+const AdminVehicleCard = () => {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     price: "",
@@ -29,7 +31,7 @@ const page = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
- const style = {
+  const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
@@ -48,15 +50,32 @@ const page = () => {
     p: { xs: 2, sm: 3, md: 4 },
   };
   return (
-    <div className="container">
-      <AdminVehicles />
-      <div className="flex justify-end my-6">
-        <button
-          onClick={() => setOpen(true)}
-          className="bg-yellow-400 hover:bg-amber-600 transition-all cursor-pointer p-3 rounded-2xl"
-        >
-          <IoMdAdd className="text-3xl" />
-        </button>
+    <div className="mt-15 p-5">
+      <div
+        onClick={() => setOpen(true)}
+        className="bg-white hover:cursor-pointer rounded-2xl shadow-md hover:shadow-xl w-85 hover:-translate-y-1 transition-all"
+      >
+        <img className="w-85 rounded-t-xl" src="/download.jpg" alt="aa" />
+        <h1 className="p-2 text-2xl">Hyundai i20N</h1>
+        <h3 className="p-2">1.6 T-GDI 6-MT</h3>
+        <div className="p-2 flex flex-wrap justify-around">
+          <p className="flex items-center  pr-2">
+            <FaCalendarAlt className="mx-2" /> 2022
+          </p>
+          <p className="flex items-center  pr-2">
+            <FaRoad className="mx-2" /> 58.000 Km
+          </p>
+          <p className="flex items-center  pr-2">
+            <GiStoneWheel className="mx-2" /> Manuel
+          </p>
+          <p className="flex items-center  pr-2">
+            <BsFillFuelPumpFill className="mx-2" /> Benzin
+          </p>
+          <p className="flex items-center pr-2">
+            <FaLocationDot className="mx-2" /> İstanbul/Beykoz
+          </p>
+        </div>
+        <h2 className="text-yellow-400 p-4 font-bold text-2xl">1.250.000 ₺</h2>
       </div>
 
       <Modal
@@ -67,11 +86,12 @@ const page = () => {
       >
         <Box sx={style}>
           <Typography variant="h6" className="mb-4 text-center">
-            Araç Ekle
+            Araç Bilgisi Güncelle
           </Typography>
           <div className="flex justify-end p-1 ">
             <button onClick={()=> setOpen(false)} className="text-2xl hover:cursor-pointer bg-yellow-400 px-2 rounded-2xl">X</button>
           </div>
+
           <form className="flex flex-col gap-3">
             <TextField
               label="Fiyat"
@@ -161,7 +181,7 @@ const page = () => {
               type="submit"
               variant="contained"
               sx={{
-                backgroundColor: "#facc15", 
+                backgroundColor: "#facc15",
                 "&:hover": { backgroundColor: "#eab308" },
               }}
             >
@@ -174,4 +194,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default AdminVehicleCard;
