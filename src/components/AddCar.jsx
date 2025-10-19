@@ -1,44 +1,51 @@
-import React, { useEffect, useState } from "react";
-import { FaRoad } from "react-icons/fa";
-import { FaCalendarAlt } from "react-icons/fa";
-import { GiStoneWheel } from "react-icons/gi";
-import { FaLocationDot } from "react-icons/fa6";
-import { BsFillFuelPumpFill } from "react-icons/bs";
+"use client";
+import AdminVehicles from "@/components/AdminVehicles";
+import React from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import { IoMdAdd } from "react-icons/io";
 import { TextField } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteCarById, updateCarById, getCars } from "@/redux/carDataSlice";
+import { useDispatch } from "react-redux";
+import { createCar } from "@/redux/carDataSlice";
 
-const AdminVehicleCard = ({ car }) => {
+const AddCar = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
-  const updateCar = () => {
-    dispatch(updateCarById({ id: car._id, updatedData: formData }));
+  const [formData, setFormData] = useState({
+    price: "",
+    address: "",
+    phone: "",
+    brand: "",
+    model: "",
+    modelYear: "",
+    fuel: "Benzin",
+    gearBox: "",
+    km: "",
+    color: "",
+    desc: "",
+  });
+  const addCar = (e) => {
+    e.preventDefault();
+    dispatch(createCar(formData));
+    setFormData({
+      price: "",
+      address: "",
+      phone: "",
+      brand: "",
+      model: "",
+      modelYear: "",
+      fuel: "",
+      gearBox: "",
+      km: "",
+      color: "",
+      desc: "",
+    });
     setOpen(false);
   };
-  const deleteCar = () => {
-    dispatch(deleteCarById(car._id)).then(() => {
-      setOpen(false);
-      dispatch(getCars());
-    });
-  };
-  const [formData, setFormData] = useState({
-    price: car.price,
-    addres: car.address,
-    phone: car.phone,
-    brand: car.brand,
-    model: car.model,
-    modelYear: car.modelYear,
-    fuel: car.fuel,
-    gearBox: car.gearBox,
-    km: car.km,
-    color: car.color,
-    desc: car.desc,
-  });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -63,35 +70,15 @@ const AdminVehicleCard = ({ car }) => {
     p: { xs: 2, sm: 3, md: 4 },
   };
   return (
-    <div className="mt-15 p-5">
-      <div
-        onClick={() => setOpen(true)}
-        className="bg-white hover:cursor-pointer rounded-2xl shadow-md hover:shadow-xl w-85 hover:-translate-y-1 transition-all"
-      >
-        <img className="w-85 rounded-t-xl" src="/download.jpg" alt="aa" />
-        <h1 className="p-2 text-2xl">{car.brand}</h1>
-        <h3 className="p-2">{car.model}</h3>
-        <div className="p-2 flex flex-wrap justify-around">
-          <p className="flex items-center  pr-2">
-            <FaCalendarAlt className="mx-2" /> {car.modelYear}
-          </p>
-          <p className="flex items-center  pr-2">
-            <FaRoad className="mx-2" /> {Number(car.km).toLocaleString("tr-TR")}{" "}
-            KM
-          </p>
-          <p className="flex items-center  pr-2">
-            <GiStoneWheel className="mx-2" /> {car.gearBox}
-          </p>
-          <p className="flex items-center  pr-2">
-            <BsFillFuelPumpFill className="mx-1" /> {car.fuel}
-          </p>
-          <p className="flex items-center pr-2">
-            <FaLocationDot className="mx-1" /> {car.address}
-          </p>
-        </div>
-        <h2 className="text-yellow-400 p-4 font-bold text-2xl">
-          {Number(car.price).toLocaleString("tr-TR")} TL
-        </h2>
+    <div className="container">
+      <AdminVehicles />
+      <div className="flex justify-end my-6">
+        <button
+          onClick={() => setOpen(true)}
+          className="bg-yellow-400 hover:bg-amber-600 transition-all cursor-pointer p-3 rounded-2xl"
+        >
+          <IoMdAdd className="text-3xl" />
+        </button>
       </div>
 
       <Modal
@@ -102,7 +89,7 @@ const AdminVehicleCard = ({ car }) => {
       >
         <Box sx={style}>
           <Typography variant="h6" className="mb-4 text-center">
-            Araç Bilgisi Güncelle
+            Araç Ekle
           </Typography>
           <div className="flex justify-end p-1 ">
             <button
@@ -112,8 +99,7 @@ const AdminVehicleCard = ({ car }) => {
               X
             </button>
           </div>
-
-          <form onSubmit={updateCar} className="flex flex-col gap-3">
+          <form onSubmit={addCar} className="flex flex-col gap-3">
             <TextField
               label="Fiyat"
               name="price"
@@ -123,8 +109,8 @@ const AdminVehicleCard = ({ car }) => {
             />
             <TextField
               label="Adres"
-              name="addres"
-              value={formData.addres}
+              name="address"
+              value={formData.address}
               onChange={handleChange}
               required
             />
@@ -208,17 +194,7 @@ const AdminVehicleCard = ({ car }) => {
                 "&:hover": { backgroundColor: "#eab308" },
               }}
             >
-              Kaydet
-            </Button>
-            <Button
-              onClick={deleteCar}
-              variant="contained"
-              sx={{
-                backgroundColor: "#FF0000",
-                "&:hover": { backgroundColor: "#FF0000" },
-              }}
-            >
-              Sil
+              Ekle
             </Button>
           </form>
         </Box>
@@ -227,4 +203,4 @@ const AdminVehicleCard = ({ car }) => {
   );
 };
 
-export default AdminVehicleCard;
+export default AddCar;

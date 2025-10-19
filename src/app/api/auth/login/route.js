@@ -4,6 +4,12 @@ import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+export async function GET(req) {
+  await dbConnect();
+  const body = await req.json();
+  const { name, surname, email } = body;
+}
+
 export async function POST(req) {
   try {
     await dbConnect();
@@ -41,7 +47,6 @@ export async function POST(req) {
       { expiresIn: "7d" }
     );
 
-
     return NextResponse.json({
       message: "Giriş başarılı!",
       token,
@@ -52,9 +57,6 @@ export async function POST(req) {
         isAdmin: user.isAdmin,
       },
     });
-
-
-
   } catch (error) {
     console.error("Login hatası:", error);
     return NextResponse.json(

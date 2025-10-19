@@ -5,13 +5,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 //get
 export const getCars = createAsyncThunk("cars/getCars", async () => {
-  const res = await axios.get(`${API_URL}`);
+  const res = await axios.get(`${API_URL}/cars`);
   return res.data;
 });
 
 //get(id)
 export const getCarById = createAsyncThunk("cars/getCarById", async (id) => {
-  const res = await axios.get(`${API_URL}/${id}`);
+  const res = await axios.get(`${API_URL}/cars/${id}`);
   return res.data;
 });
 
@@ -19,7 +19,8 @@ export const getCarById = createAsyncThunk("cars/getCarById", async (id) => {
 export const createCar = createAsyncThunk(
   "cars/createCar",
   async (formData) => {
-    const res = await axios.post(API_URL, formData);
+    console.log("form",formData)
+    const res = await axios.post(`${API_URL}/cars`, formData);
     return res.data;
   }
 );
@@ -28,7 +29,7 @@ export const createCar = createAsyncThunk(
 export const deleteCarById = createAsyncThunk(
   "cars/deleteCarById",
   async (id) => {
-    const res = await axios.delete(`${API_URL}/${id}`);
+    const res = await axios.delete(`${API_URL}/cars/${id}`);
     return res.data;
   }
 );
@@ -37,7 +38,7 @@ export const deleteCarById = createAsyncThunk(
 export const updateCarById = createAsyncThunk(
   "cars/updateCarById",
   async ({ id, updatedData }) => {
-    const res = await axios.patch(`${API_URL}/${id}`, updatedData);
+    const res = await axios.patch(`${API_URL}/cars/${id}`, updatedData);
     return res.data;
   }
 );
@@ -46,9 +47,9 @@ const carSlice = createSlice({
   name: "cars",
   initialState: {
     items: [],
-    selectedCar: null,
     loading: false,
     error: null,
+    selectedCar:{},
   },
   reducers: {},
 
@@ -87,7 +88,7 @@ const carSlice = createSlice({
       })
       .addCase(createCar.fulfilled, (state, action) => {
         state.loading = false;
-        state.items.unshift(action.payload); 
+        state.items.unshift(action.payload);
       })
       .addCase(createCar.rejected, (state, action) => {
         state.loading = false;

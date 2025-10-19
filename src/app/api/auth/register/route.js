@@ -8,9 +8,9 @@ export async function POST(req) {
     await dbConnect();
 
     const body = await req.json();
-    const { username, email, password } = body;
+    const { name, surname, email, password } = body;
 
-    if (!username || !email || !password) {
+    if (!name || !surname || !email || !password) {
       return NextResponse.json(
         { error: "Tüm alanları doldurun" },
         { status: 400 }
@@ -25,12 +25,20 @@ export async function POST(req) {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
-      username,
+      name,
+      surname,
       email,
       password: hashedPassword,
     });
     return NextResponse.json(
-      { message: "Kayıt Başarılı", user: { username, email } },
+      {
+        message: "Kayıt başarılı 🎉",
+        user: {
+          name: newUser.name,
+          surname: newUser.surname,
+          email: newUser.email,
+        },
+      },
       { status: 201 }
     );
   } catch (error) {

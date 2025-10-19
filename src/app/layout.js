@@ -1,9 +1,12 @@
+"use client";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Saira } from "next/font/google";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import { Provider } from "react-redux";
+import { store } from "@/redux/store";
 
 
 const saira = Saira({
@@ -27,8 +30,10 @@ export default function RootLayout({ children }) {
       <body className={`${saira.className} bg-gray-100`}>
         <Header />
         <main>
+          <Provider store={store}>
           {children}
           <Toaster position="top-right" reverseOrder={false} />
+          </Provider>
         </main>
         <Footer />
       </body>

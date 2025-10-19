@@ -7,7 +7,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData) => {
-    const res = await axios.post(`${API_URL}/register`, userData);
+    const res = await axios.post(`${API_URL}/auth/register`, userData);
     return res.data;
   }
 );
@@ -16,7 +16,7 @@ export const registerUser = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (loginData) => {
-    const res = await axios.post(`${API_URL}/login`, loginData);
+    const res = await axios.post(`${API_URL}/auth/login`, loginData);
 
     const { token, user } = res.data;
     if (token) {

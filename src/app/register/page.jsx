@@ -1,11 +1,25 @@
 "use client";
+import { registerUser } from "@/redux/authSlice";
 import { registerSchema } from "../../schema/registerSchema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { CircularProgress } from "@mui/material";
 
 const page = () => {
- 
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { loading } = useSelector((state) => state.auth);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center w-full h-screen bg-gray-100">
+        <CircularProgress size={60} thickness={3} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -18,32 +32,17 @@ const page = () => {
           confirmPassword: "",
         }}
         validationSchema={registerSchema}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log("Form gönderildi:", values);
+        onSubmit={async (values, { resetForm }) => {
+          
+          const result = await dispatch(registerUser(values))
 
-          try {
-            
-            const res = await fetch("/api/auth/register", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" }, 
-              body: JSON.stringify({
-                username: `${values.name} ${values.surname}`, 
-                email: values.email,
-                password: values.password, 
-              }),
-            });
-
-            const data = await res.json();
-            if (res.ok) {
-              toast.success("Kayıt Başarılı")
-              resetForm();
-            } else {
-              toast.error(data.error || "Bir hata oluştur")
-            }
-          } catch (error) {
-            toast.error("Sunucu Hatası")
-          } finally {
-            setSubmitting(false);
+          if (registerUser.fulfilled.match(result)) {
+             toast.success("Kayıt başarılı 🎉");
+             router.push("/login")
+             resetForm();
+          }
+          else{
+            toast.error("Kayıt Başarısız!")
           }
         }}
       >
@@ -110,7 +109,7 @@ const page = () => {
             </div>
             <div>
               <Field
-                type="confirmPassword"
+                type="password"
                 name="confirmPassword"
                 placeholder="Şifre Doğrula"
                 className="border-gray-400 border rounded-sm text-sm w-full px-3 py-3 bg-gray-100"

@@ -2,49 +2,46 @@
 import { loginSchema } from "../../schema/loginSchema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "@/redux/authSlice";
+import { CircularProgress } from "@mui/material";
 
 const page = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center w-full h-screen bg-gray-100">
+        <CircularProgress size={40} thickness={3} />
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={loginSchema}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log("Form gönderildi:", values);
+        onSubmit={async (values, { resetForm }) => {
+          const result = await dispatch(loginUser(values));
 
-          try {
-            const res = await fetch("api/auth/login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(values),
-            });
+          if (loginUser.fulfilled.match(result)) {
+            toast.success("Giriş başarılı 🎉");
+            const user = result.payload.user;
 
-            const data = await res.json();
-
-            if (res.ok) {
-              toast.success("Giriş başarılı! 🎉");
-              if (data.token) {
-                localStorage.setItem("token", data.token);
-              }
-              if (data.user.isAdmin) {
-                router.push(`/admin/${data.user._id}`);
-              } else {
-                router.push(`/profile/${data.user._id}`);
-              }
+            if (user.isAdmin) {
+              router.push(`/admin/${user._id}`);
             } else {
-              toast.error(data.error || "Giriş başarısız!");
+              router.push(`/profile/${user._id}`);
             }
+
             resetForm();
-          } catch (error) {
-            toast.error("Sunucu Hatası!");
-            console.error("İstek hatası:", error);
-            setServerMessage("Sunucu hatası oluştu!");
-          } finally {
-            setSubmitting(false);
+          } else {
+            toast.error(result.payload || "Giriş başarısız!");
           }
         }}
       >

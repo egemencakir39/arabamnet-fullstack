@@ -5,7 +5,7 @@ import CarData from "@/models/CarData";
 export async function GET(req, { params }) {
   try {
     await dbConnect();
-    const { id } = params;
+    const { id } = await params;
 
     const car = await CarData.findById(id);
 
@@ -27,7 +27,7 @@ export async function GET(req, { params }) {
 export async function DELETE(req, { params }) {
   try {
     await dbConnect();
-    const {id} = params;
+    const {id} = await params;
 
     if (!id) {
       return NextResponse.json(
@@ -51,7 +51,7 @@ export async function PATCH(req, { params }) {
   try {
     await dbConnect();
 
-    const { id } = params;
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json(
