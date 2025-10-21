@@ -13,9 +13,14 @@ const CarSchema = new mongoose.Schema(
     km: { type: String, required: true },
     color: { type: String, required: true },
     desc: { type: String, default: "Açıklama eklenmemiş" },
-    images: [{ type: String }],
+    images: [
+      {
+        url: { type: String, required: true },
+        publicId: { type: String, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );
-
+delete mongoose.connection.models["CarData"];
 export default mongoose.models.CarData || mongoose.model("CarData", CarSchema);

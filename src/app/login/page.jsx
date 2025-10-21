@@ -28,6 +28,7 @@ const page = () => {
         validationSchema={loginSchema}
         onSubmit={async (values, { resetForm }) => {
           const result = await dispatch(loginUser(values));
+          localStorage.setItem("user", JSON.stringify(data.user));
 
           if (loginUser.fulfilled.match(result)) {
             toast.success("Giriş başarılı 🎉");
@@ -38,7 +39,6 @@ const page = () => {
             } else {
               router.push(`/profile/${user._id}`);
             }
-
             resetForm();
           } else {
             toast.error(result.payload || "Giriş başarısız!");

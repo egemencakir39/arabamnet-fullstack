@@ -3,13 +3,15 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { updateSchema } from "@/schema/updateSchema";
+import { useSelector } from "react-redux";
 
 const ProfileInfo = () => {
+  const { user } = useSelector((state) => state.auth);
   const initialValues = {
-    name: "",
-    surname: "",
-    email: "",
-    phone: "",
+    name: user?.name,
+    surname: user?.surname,
+    email: user?.email,
+    phone: user?.phone,
     password: "",
   };
   return (

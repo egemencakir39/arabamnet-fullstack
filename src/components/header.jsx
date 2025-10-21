@@ -1,13 +1,32 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSolidLogIn } from "react-icons/bi";
 import Link from "next/link";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Modal, Box, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { CgProfile } from "react-icons/cg";
+import { logoutUser, setUser } from "@/redux/authSlice";
+import { BiSolidLogOut } from "react-icons/bi";
+import { useRouter } from "next/navigation";
 
-const header = () => {
+const Header = () => {
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await dispatch(logoutUser());
+    window.location.href = "/";
+  };
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      dispatch(setUser(JSON.parse(storedUser)));
+    }
+  }, [dispatch]);
 
   const style = {
     position: "absolute",
@@ -48,14 +67,49 @@ const header = () => {
           </ul>
         </nav>
         <div>
-          <Link href="/login">
-            <button className="bg-yellow-400 md:flex hidden p-2 rounded-xl hover:cursor-pointer hover:text-white transition-all hover:bg-amber-500">
-              Giriş Yap
-              <BiSolidLogIn className="text-2xl mx-2" />
-            </button>
-          </Link>
-        </div>
+          {!user && (
+            <Link href="/login">
+              <button className="bg-yellow-400 md:flex hidden p-2 rounded-xl hover:cursor-pointer hover:text-white transition-all hover:bg-amber-500">
+                Giriş Yap
+                <BiSolidLogIn className="text-2xl mx-2" />
+              </button>
+            </Link>
+          )}
 
+          {user && user.isAdmin && (
+            <div className="flex">
+              <Link href={`/admin/${user._id}`}>
+                <button className="bg-yellow-400 md:flex hidden p-2 rounded-xl hover:cursor-pointer hover:text-white transition-all hover:bg-amber-500">
+                  Admin Panel
+                  <CgProfile className="text-2xl mx-2" />
+                </button>
+              </Link>
+              <div className="bg-yellow-400 ml-2 md:flex hidden p-2 rounded-xl hover:cursor-pointer hover:text-white transition-all hover:bg-amber-500">
+                <BiSolidLogOut
+                  onClick={handleLogout}
+                  className="text-2xl mx-2"
+                />
+              </div>
+            </div>
+          )}
+
+          {user && !user.isAdmin && (
+            <div className="flex">
+              <Link href={`/profile/${user._id}`}>
+                <button className="bg-yellow-400 md:flex hidden p-2 rounded-xl hover:cursor-pointer hover:text-white transition-all hover:bg-amber-500">
+                  Profilim
+                  <CgProfile className="text-2xl mx-2" />
+                </button>
+              </Link>
+              <div className="bg-yellow-400 ml-2  md:flex hidden p-2 rounded-xl hover:cursor-pointer hover:text-white transition-all hover:bg-amber-500">
+                <BiSolidLogOut
+                  onClick={handleLogout}
+                  className="text-2xl mx-2"
+                />
+              </div>
+            </div>
+          )}
+        </div>
         {/* Hamburger Menü */}
 
         <div className="md:hidden flex">
@@ -74,20 +128,29 @@ const header = () => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <ul className="flex flex-col gap-3 text-lg text-amber-400">
-                <Link href="/about" onClick={handleClose}>
-                  Hakkında
-                </Link>
-                <Link href="/contact" onClick={handleClose}>
-                  Bize Ulaş
-                </Link>
+            <ul className="flex flex-col gap-3 text-lg text-amber-400">
+              <Link href="/about" onClick={handleClose}>
+                Hakkında
+              </Link>
+              <Link href="/contact" onClick={handleClose}>
+                Bize Ulaş
+              </Link>
+              {!user && (
                 <Link href="/login" onClick={handleClose}>
                   Giriş Yap
                 </Link>
-              </ul>
-            </Typography>
+              )}
+              {user && !user.isAdmin && (
+                <Link href={`/profile/${user._id}`} onClick={handleClose}>
+                  Profilim
+                </Link>
+              )}
+              {user && user.isAdmin && (
+                <Link href={`/admin/${user._id}`} onClick={handleClose}>
+                  Admin Panel
+                </Link>
+              )}
+            </ul>
           </Box>
         </Modal>
       </div>
@@ -95,4 +158,4 @@ const header = () => {
   );
 };
 
-export default header;
+export default Header;

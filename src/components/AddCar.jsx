@@ -10,6 +10,7 @@ import { IoMdAdd } from "react-icons/io";
 import { TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { createCar } from "@/redux/carDataSlice";
+import UploadImages from "./UploadImages";
 
 const AddCar = () => {
   const [open, setOpen] = useState(false);
@@ -43,6 +44,7 @@ const AddCar = () => {
       km: "",
       color: "",
       desc: "",
+      images: [],
     });
     setOpen(false);
   };
@@ -185,6 +187,12 @@ const AddCar = () => {
               onChange={handleChange}
               multiline
               rows={3}
+            />
+            <UploadImages
+              value={formData.images}
+              onChange={(imgs) =>
+                setFormData((prev) => ({ ...prev, images: imgs }))
+              }
             />
             <Button
               type="submit"

@@ -11,7 +11,11 @@ const VehicleCard = ({ car }) => {
     <div className="mt-15 p-5">
       <Link href={`ilan/${car._id}`}>
         <div className="bg-white hover:cursor-pointer rounded-2xl shadow-md hover:shadow-xl w-85 hover:-translate-y-1 transition-all">
-          <img className="w-85 rounded-t-xl" src="download.jpg" alt="" />
+          <img
+            className="w-85 h-56 rounded-t-xl"
+            src={car.images?.[0]?.url}
+            alt={`${car.brand} ${car.model}`}
+          />
           <h1 className="p-2 text-2xl">{car.brand}</h1>
           <h3 className="p-2">{car.model}</h3>
           <div className="p-2 flex flex-wrap justify-around">
@@ -19,7 +23,8 @@ const VehicleCard = ({ car }) => {
               <FaCalendarAlt className="mx-2" /> {car.modelYear}
             </p>
             <p className="flex items-center  pr-2">
-              <FaRoad className="mx-2" /> {Number(car.km).toLocaleString("tr-TR")} KM
+              <FaRoad className="mx-2" />{" "}
+              {Number(car.km).toLocaleString("tr-TR")} KM
             </p>
             <p className="flex items-center  pr-2">
               <GiStoneWheel className="mx-2" /> {car.gearBox}

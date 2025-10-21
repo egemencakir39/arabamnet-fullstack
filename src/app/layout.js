@@ -8,7 +8,6 @@ import Footer from "@/components/footer";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 
-
 const saira = Saira({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
@@ -28,14 +27,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${saira.className} bg-gray-100`}>
-        <Header />
-        <main>
-          <Provider store={store}>
-          {children}
-          <Toaster position="top-right" reverseOrder={false} />
-          </Provider>
-        </main>
-        <Footer />
+        <Provider store={store}>
+          <Header />
+          <main>
+            {children}
+            <Toaster position="top-right" reverseOrder={false} />
+          </main>
+          <Footer />
+        </Provider>
       </body>
     </html>
   );

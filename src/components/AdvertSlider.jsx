@@ -6,18 +6,13 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 
-const slides = [
-  "/download.jpg",
-  "/download.jpg",
-  "/download.jpg",
-  "/download.jpg",
-  "/download.jpg",
-];
 
 const AdvertSlider = () => {
   const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
-  const { items, loading, error, selectedCar } = useSelector((state) => state.carData);
+  const { items, loading, error, selectedCar } = useSelector(
+    (state) => state.carData
+  );
   const { id } = useParams();
 
   useEffect(() => {
@@ -25,11 +20,13 @@ const AdvertSlider = () => {
   }, []);
 
   const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % slides.length);
+   if (!selectedCar.images || selectedCar.images.length <= 1) return; 
+    setCurrent((prev) => (prev + 1) % selectedCar.images.length);
   };
 
   const prevSlide = () => {
-    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+     if (!selectedCar.images || selectedCar.images.length <= 1) return; 
+    setCurrent((prev) => (prev - 1) % selectedCar.images.length);
   };
 
   if (loading) {
@@ -45,16 +42,20 @@ const AdvertSlider = () => {
   return (
     <div>
       <div className="mt-15">
-        <p className="text-2xl font-bold text-gray-400">{selectedCar.modelYear}</p>
-        <p className="text-3xl">{selectedCar.brand} {selectedCar.model} </p>
+        <p className="text-2xl font-bold text-gray-400">
+          {selectedCar.modelYear}
+        </p>
+        <p className="text-3xl">
+          {selectedCar.brand} {selectedCar.model}{" "}
+        </p>
       </div>
       <div className="mt-5 lg:flex ">
         <div className="relative  lg:w-[70%] h-[600px] overflow-hidden rounded-xl">
-          {slides.map((src, index) => (
+          {selectedCar.images?.map((img, index) => (
             <img
               key={index}
-              src={src}
-              alt={`Slide ${index + 1}`}
+              src={img.url}
+              alt={`${selectedCar.brand} ${selectedCar.model}`}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
                 index === current ? "opacity-100" : "opacity-0"
               }`}
@@ -76,7 +77,7 @@ const AdvertSlider = () => {
           </button>
 
           <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
-            {slides.map((_, index) => (
+            {selectedCar.images?.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrent(index)}
@@ -91,7 +92,9 @@ const AdvertSlider = () => {
         <div className="lg:ml-10 lg:mt-0 mt-10 lg:w-[25%] w-full justify-center">
           <div className="bg-yellow-400 px-8 py-5 rounded-2xl">
             <p>Fiyat</p>
-            <p className="text-2xl">{Number(selectedCar.price).toLocaleString("tr-TR")} TL</p>
+            <p className="text-2xl">
+              {Number(selectedCar.price).toLocaleString("tr-TR")} TL
+            </p>
           </div>
 
           {/* İletişim ve adres*/}
@@ -130,7 +133,9 @@ const AdvertSlider = () => {
             </div>
             <div className="flex justify-between mt-5">
               <p className="text-yellow-400">KM</p>
-              <p className=" text-yellow-400">{Number(selectedCar.km).toLocaleString("tr-TR")}</p>
+              <p className=" text-yellow-400">
+                {Number(selectedCar.km).toLocaleString("tr-TR")}
+              </p>
             </div>
             <div className="flex justify-between mt-5">
               <p className="text-yellow-400">Renk</p>
@@ -142,9 +147,7 @@ const AdvertSlider = () => {
       <div className="mt-10 bg-yellow-400 rounded-2xl ">
         <div className="p-5">
           <h3 className="text-2xl">Açıklama</h3>
-          <p className="mt-2 whitespace-pre-line">
-           {selectedCar.desc}
-          </p>
+          <p className="mt-2 whitespace-pre-line">{selectedCar.desc}</p>
         </div>
       </div>
     </div>

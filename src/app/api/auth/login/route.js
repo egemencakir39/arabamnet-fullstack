@@ -4,12 +4,6 @@ import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export async function GET(req) {
-  await dbConnect();
-  const body = await req.json();
-  const { name, surname, email } = body;
-}
-
 export async function POST(req) {
   try {
     await dbConnect();
@@ -24,10 +18,9 @@ export async function POST(req) {
     }
 
     const user = await User.findOne({ email });
-
     if (!user) {
       return NextResponse.json(
-        { error: "Böyle bir kullanıcı bulunamadı" },
+        { error: "Böyle bir kullanıcı bulunamadı." },
         { status: 404 }
       );
     }
@@ -40,23 +33,33 @@ export async function POST(req) {
     const token = jwt.sign(
       {
         id: user._id,
-        username: user.username,
+        name: user.name,
+        surname: user.surname,
         email: user.email,
+        isAdmin: user.isAdmin,
       },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       message: "Giriş başarılı!",
-      token,
       user: {
         _id: user._id,
-        username: user.username,
+        name: user.name,
+        surname: user.surname,
         email: user.email,
         isAdmin: user.isAdmin,
       },
     });
+
+    res.cookies.set("token", token, {
+      httpOnly: true,
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60,
+    });
+
+    return res;
   } catch (error) {
     console.error("Login hatası:", error);
     return NextResponse.json(

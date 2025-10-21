@@ -11,6 +11,7 @@ import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCarById, updateCarById, getCars } from "@/redux/carDataSlice";
+import UploadImages from "./UploadImages";
 
 const AdminVehicleCard = ({ car }) => {
   const [open, setOpen] = useState(false);
@@ -38,6 +39,7 @@ const AdminVehicleCard = ({ car }) => {
     km: car.km,
     color: car.color,
     desc: car.desc,
+    images: car.images,
   });
 
   const handleChange = (e) => {
@@ -68,7 +70,11 @@ const AdminVehicleCard = ({ car }) => {
         onClick={() => setOpen(true)}
         className="bg-white hover:cursor-pointer rounded-2xl shadow-md hover:shadow-xl w-85 hover:-translate-y-1 transition-all"
       >
-        <img className="w-85 rounded-t-xl" src="/download.jpg" alt="aa" />
+        <img
+          className="w-85 h-56 object-cover rounded-t-xl"
+          src={car.images?.[0]?.url}
+          alt={`${car.brand} ${car.model}`}
+        />
         <h1 className="p-2 text-2xl">{car.brand}</h1>
         <h3 className="p-2">{car.model}</h3>
         <div className="p-2 flex flex-wrap justify-around">
@@ -199,6 +205,10 @@ const AdminVehicleCard = ({ car }) => {
               onChange={handleChange}
               multiline
               rows={3}
+            />
+            <UploadImages
+              value={formData.images} 
+              onChange={(imgs) => setFormData({ ...formData, images: imgs })}
             />
             <Button
               type="submit"
