@@ -28,7 +28,6 @@ const page = () => {
         validationSchema={loginSchema}
         onSubmit={async (values, { resetForm }) => {
           const result = await dispatch(loginUser(values));
-          localStorage.setItem("user", JSON.stringify(data.user));
 
           if (loginUser.fulfilled.match(result)) {
             toast.success("Giriş başarılı 🎉");
@@ -40,8 +39,8 @@ const page = () => {
               router.push(`/profile/${user._id}`);
             }
             resetForm();
-          } else {
-            toast.error(result.payload || "Giriş başarısız!");
+          } else if (loginUser.rejected.match(result)) {
+            toast.error("Giriş başarısız!");
           }
         }}
       >
@@ -89,7 +88,7 @@ const page = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-4 text-center py-2 px-3 text-white rounded-lg bg-blue-500 hover:bg-blue-600 transition"
+                className="mt-4 text-center py-2 px-3 hover:text-white rounded-lg bg-amber-400 hover:bg-amber-500 transition"
               >
                 Giriş Yap
               </button>
