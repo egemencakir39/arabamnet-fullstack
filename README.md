@@ -66,13 +66,12 @@ Proje, modern web teknolojileri kullanılarak **Next.js 15, MongoDB, JWT Authent
 - Araçlar marka, model, fiyat, yakıt türü, vites tipi ve yıl bilgisine göre filtrelenebilecek.
 
 ---
+### 👉 Live
+
+- https://arabamnet-fullstack.vercel.app
 
 ### Geliştirme Ortamı
 ```bash
 npm install
 npm run dev
 
-Deployment
-
-Proje Vercel üzerinde yayınlanmıştır:
-👉 https://arabamnet-fullstack.vercel.app
