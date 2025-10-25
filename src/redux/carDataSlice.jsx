@@ -19,7 +19,6 @@ export const getCarById = createAsyncThunk("cars/getCarById", async (id) => {
 export const createCar = createAsyncThunk(
   "cars/createCar",
   async (formData) => {
-    console.log("form",formData)
     const res = await axios.post(`${API_URL}/cars`, formData);
     return res.data;
   }

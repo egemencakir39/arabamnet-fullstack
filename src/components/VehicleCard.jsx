@@ -12,7 +12,7 @@ const VehicleCard = ({ car }) => {
       <Link href={`ilan/${car._id}`}>
         <div className="bg-white hover:cursor-pointer rounded-2xl shadow-md hover:shadow-xl w-85 hover:-translate-y-1 transition-all">
           <img
-            className="w-85 h-56 rounded-t-xl"
+            className="w-85 h-56 object-cover rounded-t-xl"
             src={car.images?.[0]?.url}
             alt={`${car.brand} ${car.model}`}
           />
@@ -36,7 +36,7 @@ const VehicleCard = ({ car }) => {
               <FaLocationDot className="mx-1" /> {car.address}
             </p>
           </div>
-          <h2 className="text-yellow-400 p-4 font-bold text-2xl">
+          <h2 className="text-yellow-500 p-4 font-bold text-2xl">
             {Number(car.price).toLocaleString("tr-TR")} TL
           </h2>
         </div>

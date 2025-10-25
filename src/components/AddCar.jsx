@@ -146,7 +146,7 @@ const AddCar = () => {
             />
             <select
               name="fuel"
-              value={formData.fuel}
+              value={""}
               onChange={handleChange}
               className="border border-gray-300 p-2 rounded-sm"
             >
@@ -158,7 +158,7 @@ const AddCar = () => {
             </select>
             <select
               name="gearBox"
-              value={formData.gearBox}
+              value={""}
               onChange={handleChange}
               className="border border-gray-300 p-2 rounded-sm"
             >

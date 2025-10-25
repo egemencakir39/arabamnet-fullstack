@@ -95,7 +95,7 @@ const AdminVehicleCard = ({ car }) => {
             <FaLocationDot className="mx-1" /> {car.address}
           </p>
         </div>
-        <h2 className="text-yellow-400 p-4 font-bold text-2xl">
+        <h2 className="text-yellow-500 p-4 font-bold text-2xl">
           {Number(car.price).toLocaleString("tr-TR")} TL
         </h2>
       </div>
