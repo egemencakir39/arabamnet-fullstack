@@ -125,7 +125,7 @@ const page = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-4 text-center py-2 px-3 text-white rounded-lg bg-blue-500 hover:bg-blue-600 transition"
+                className="mt-4 text-center py-2 px-3 hover:text-white rounded-lg bg-amber-400 hover:bg-amber-500 transition"
               >
                 Kayıt Ol
               </button>
