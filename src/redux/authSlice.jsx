@@ -30,6 +30,7 @@ export const logoutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await axios.post("/api/auth/logout");
+      localStorage.removeItem("user");
       return null;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || "Çıkış başarısız");
@@ -70,6 +71,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
         state.user = action.payload.user;
       })
       .addCase(loginUser.rejected, (state, action) => {
